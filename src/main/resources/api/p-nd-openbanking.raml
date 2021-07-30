@@ -1,0 +1,92 @@
+#%RAML 1.0
+title: e-nd-openBanking
+
+protocols: [HTTP]
+
+uses:
+  request: /exchange_modules/81a47cd9-f628-4474-99b6-f13cb4152cbe/collection2/1.0.1/collection2.raml
+types:
+  store: !include /datatype/Store_dataType.raml
+  barcode: !include /datatype/Barcode_dataType.raml
+  fidelity: !include /datatype/Fidelity_dataType.raml
+  item: !include /datatype/Item_dataType.raml
+  order: !include /datatype/Order_dataType.raml
+  orderedProduct: !include /datatype/OrderedProduct_dataType.raml
+  product: !include /datatype/Product_dataType.raml
+  promo: !include /datatype/Promo_dataType.raml
+  user: !include /datatype/User_dataType.raml
+
+securitySchemes:
+  securityBasicScheme: !include /exchange_modules/81a47cd9-f628-4474-99b6-f13cb4152cbe/securityfragment/1.0.0/securityfragment.raml
+
+securedBy:
+  - securityBasicScheme
+
+/experience:
+  /info_user/{user_id}:
+    type:
+      request.read-only:
+        exampleRead: !include examples/User_example.raml
+
+  /info_product/{product_id}:
+    type:
+      request.read-only:
+        exampleRead: !include examples/Product_example.raml
+  
+  /info_order/{order_id}:
+    type:
+      request.read-only:
+        exampleRead: {
+          IDorder : AFZE323R2Fefa2Rr,
+          OrderPrice : 100,
+          Products : [
+          {
+            ProductName : "RandomProduct1",
+            ProductPrice : 25,
+            ProductQuantity : 3
+          },
+          {
+            ProductName : "RandomProduct2",
+            ProductPrice : 25,
+            ProductQuantity : 1
+          }
+          ]
+        }
+
+  /info_promo/{store_id}:
+    type:
+      request.read-only:
+        exampleRead: !include examples/Promo_example.raml
+
+  
+  /new_order/{store_qrcode}:
+    type:
+      request.post-only:
+        exampleBodyPost: { store_qrcode : 1}
+        exampleReadPost: { message : "order created"}
+  
+  /product/{product_id}:
+    type:
+      request.post-only:
+        exampleBodyPost: { orderID : AFZE323R2Fefa2Rr}
+        exampleReadPost: { message : "product added"}
+    /plus:
+      type:
+        request.post-only:
+          exampleBodyPost: { orderID : AFZE323R2Fefa2Rr,
+          }
+          exampleReadPost: { message : "product added"}
+    /minus:
+      type:
+        request.post-only:
+          exampleBodyPost: { orderID : AFZE323R2Fefa2Rr}
+          exampleReadPost: { message : "product cut"}
+
+  /order/{order_id}:
+    type:
+      request.post-only:
+        exampleReadPost: { message : order validated}
+        exampleBodyPost: 
+
+
+  
