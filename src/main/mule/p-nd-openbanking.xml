@@ -201,12 +201,14 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\experience\product\(product_id)\minus:application\json:p-nd-openbanking-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="product_id">attributes.uriParams.'product_id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <http:request method="POST" doc:name="Request" doc:id="a6ab2278-9fc3-424f-8288-e96e02b279cc" config-ref="HTTP_Request_configuration_process" path="/api/process/products_order/minus">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"NumberToRemove" : attributes.QueryParams.NumberToRemove
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -218,29 +220,30 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\experience\new_order\(store_qrcode):application\json:p-nd-openbanking-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="store_qrcode">attributes.uriParams.'store_qrcode'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <http:request method="GET" doc:name="Request" doc:id="d3e7d1c3-5e8b-45bb-b0dd-6c30e99d49a5" config-ref="HTTP_Request_configuration_process" path="/api/process/{store_qr_code}/">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	store_qr_code : attributes.UriParams.store_qr_code
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	IDuser : attributes.queryParams.IDuser
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{
-  message: "order created"
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
     <flow name="post:\experience\order\(order_id):application\json:p-nd-openbanking-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="order_id">attributes.uriParams.'order_id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <http:request method="POST" doc:name="Request" doc:id="2c915cd2-1b35-49f2-bc93-6466dc30267b" config-ref="HTTP_Request_configuration_process" path="/api/process/order/validation"/>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -252,12 +255,14 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\experience\product\(product_id)\plus:application\json:p-nd-openbanking-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="product_id">attributes.uriParams.'product_id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <http:request method="POST" doc:name="Copy_of_Request" doc:id="db3af047-a71e-4f72-9c7a-9ffad815ebfe" config-ref="HTTP_Request_configuration_process" path="/api/process/products_order/plus">
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"NumberToAdd" : attributes.QueryParams.NumberToAdd
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -269,12 +274,15 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\experience\product\(product_id):application\json:p-nd-openbanking-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="product_id">attributes.uriParams.'product_id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <http:request method="POST" doc:name="Request" doc:id="488f166b-a8b8-4d57-b123-32ec45d22d53" config-ref="HTTP_Request_configuration_process" path="/api/process/products_order/to_order">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	IDorder : attribute.QueryParams.IDorder,
+	IDproduct : attributes.QueryParams.IDproduct
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
